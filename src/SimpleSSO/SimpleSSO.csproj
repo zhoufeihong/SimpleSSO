@@ -309,6 +309,7 @@
     <Content Include="Plugins\fileinput\css\fileinput.min.css" />
     <Content Include="Plugins\fileinput\img\loading-sm.gif" />
     <Content Include="Plugins\fileinput\img\loading.gif" />
+    <Content Include="Plugins\jquery-ui\AUTHORS.txt" />
     <Content Include="Plugins\jquery-ui\css\jquery-ui.css" />
     <Content Include="Plugins\jquery-ui\css\jquery-ui.min.css" />
     <Content Include="Plugins\jquery-ui\css\jquery-ui.structure.css" />
@@ -323,6 +324,7 @@
     <Content Include="Plugins\jquery-ui\css\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Plugins\jquery-ui\js\jquery-ui.js" />
     <Content Include="Plugins\jquery-ui\js\jquery-ui.min.js" />
+    <Content Include="Plugins\jquery-ui\LICENSE.txt" />
     <Content Include="Plugins\select2\css\select2.css" />
     <Content Include="Plugins\select2\css\select2.min.css" />
     <Content Include="Plugins\select2\js\i18n\ar.js" />
@@ -448,6 +450,17 @@
     <Content Include="Areas\Admin\Views\Role\Index.cshtml" />
     <Content Include="Areas\OAuth\Views\Grant\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Ticket\Index.cshtml" />
+    <Content Include="Plugins\select2\LICENSE.md" />
+    <Content Include="Plugins\admin-lte\LICENSE" />
+    <Content Include="Plugins\toastr\README.md" />
+    <Content Include="Plugins\bootstrapValidator\CHANGELOG.md" />
+    <Content Include="Plugins\bootstrapValidator\README.md" />
+    <Content Include="Plugins\admin-lte\README.md" />
+    <Content Include="Plugins\select2\README.md" />
+    <Content Include="Plugins\fileinput\LICENSE.md" />
+    <Content Include="Plugins\fileinput\README.md" />
+    <Content Include="Plugins\bootstrap-table\LICENSE.md" />
+    <Content Include="Plugins\bootstrap-table\README.md" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\bootstrap.js" />

@@ -92,7 +92,9 @@ namespace SimpleSSO.Code
                     RemoveWhenReceive = true
                 },
                 //在生产模式下设 AllowInsecureHttp = false
+#if DEBUG
                 AllowInsecureHttp = true
+#endif
             }).As<OAuthAuthorizationServerOptions>().SingleInstance();
 
             //控制器

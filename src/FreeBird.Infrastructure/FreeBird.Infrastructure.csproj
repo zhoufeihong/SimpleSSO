@@ -166,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Caching\LICENSE.md" />
+    <None Include="Caching\README.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
