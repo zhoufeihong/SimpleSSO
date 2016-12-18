@@ -1,0 +1,143 @@
+﻿@model IEnumerable<SimpleSSO.DTO.System.AppDTO>
+@using SimpleSSO.Code
+@{
+    ViewBag.Title = "List";
+}
+<style>
+    .spana {
+        cursor: pointer;
+    }
+</style>
+<div class="box box-default color-palette-box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i>使用Code应用列表 </h3>
+    </div>
+    <div class="box-body">
+        @foreach (var app in Model.Where(w => w.ClientID == 1))
+            {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>@app.Name</h3>
+                        <p>SimpleSSO授权</p>
+                    </div>
+                    <div class="icon">
+                        <li class="fa">
+                            <img class="img-circle" style="width:90px;height:90px;vertical-align:top" src="../..@app.IconUrl" alt="App">
+                        </li>
+                    </div>
+                    @{
+                        var state = RandomOAuthStateGenerator.Generate(32);
+                        var url = $"http://localhost:8550/GrantCode/Authorize?client_id={app.ClientID}&redirect_uri={Url.Encode(app.ReturnUrl)}&response_type=code&scope=user_base&state={state}";
+                    }
+                    <span id="@url" class="small-box-footer spana">
+                        进入<i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </div>
+            </div>
+                        }
+    </div>
+</div>
+<div class="box box-default color-palette-box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i>使用Token应用列表 </h3>
+    </div>
+    <div class="box-body">
+        @foreach (var app in Model.Where(w => w.ClientID == 2))
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>@app.Name</h3>
+                        <p>SimpleSSO授权</p>
+                    </div>
+                    <div class="icon">
+                        <li class="fa">
+                            <img class="img-circle" style="width:90px;height:90px;vertical-align:top" src="../..@app.IconUrl" alt="App">
+                        </li>
+                    </div>
+                    @{
+                        var state = RandomOAuthStateGenerator.Generate(32);
+                        var url = $"http://localhost:8550/GrantCode/Authorize?client_id={app.ClientID}&redirect_uri={Url.Encode(app.ReturnUrl)}&response_type=token&scope=user_base&state={state}";
+                    }
+                    <a href="@url" class="small-box-footer spana">
+                        进入<i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+                        }
+    </div>
+</div>
+
+<div class="box box-default color-palette-box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i>使用用户密码应用列表 </h3>
+    </div>
+    <div class="box-body">
+        @foreach (var app in Model.Where(w => w.ClientID == 1))
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>@app.Name</h3>
+                        <p>SimpleSSO授权</p>
+                    </div>
+                    <div class="icon">
+                        <li class="fa">
+                            <img class="img-circle" style="width:90px;height:90px;vertical-align:top" src="../..@app.IconUrl" alt="App">
+                        </li>
+                    </div>
+                    <span id="http://localhost:6111/api/Code/AppPassword" class="small-box-footer spana">
+                        进入<i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="box box-default color-palette-box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i>获取自己秘钥应用列表 </h3>
+    </div>
+    <div class="box-body">
+        @foreach (var app in Model.Where(w => w.ClientID == 1))
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>@app.Name</h3>
+                        <p>SimpleSSO授权</p>
+                    </div>
+                    <div class="icon">
+                        <li class="fa">
+                            <img class="img-circle" style="width:90px;height:90px;vertical-align:top" src="../..@app.IconUrl" alt="App">
+                        </li>
+                    </div>
+                    <span id="http://localhost:6111/api/Code/AppclientCredentials" class="small-box-footer spana">
+                        进入<i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div id="dialog" style="display:none"></div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".box-body span.spana").click(
+                function () {
+                    var url = $(this).prop("id");
+                    $("#dialog").load(url, null, function () {
+                        Ewin.info($("#dialog").html(), "授权请求");
+                    });
+                });
+        });
+    </script>
+}

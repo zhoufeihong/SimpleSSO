@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "Tickets";
+}
+<div style="width:100%;height:100%">
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="control-label col-sm-1" for="txt_search_app">App</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txt_search_app">
+                        </div>
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="toolbar" class="btn-group">
+            <button id="btn_delete" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+            </button>
+        </div>
+        <table id="tb_tickets" style="height:15%"></table>
+    </div>
+</div>
+<style>
+    .form-group {
+        padding: 3px;
+    }
+
+        .form-group > label {
+            width: 85px;
+            text-align: right;
+        }
+
+        .form-group > input {
+            padding-right: 42.5px;
+        }
+
+    .panel {
+        margin-bottom: 5px;
+    }
+
+    .panel-body {
+        padding: 5px;
+    }
+</style>
+@section scripts
+{
+    <script type="text/javascript">
+        var $btnDelete = "#btn_delete",
+            $btnQuery = "#btn_query",
+            $tableID = "#tb_tickets",
+            $queryUrl = "/Ticket/Query",
+            $deleteUrl = "/Ticket/Delete",
+            $toolbar = "#toolbar";
+
+        $(function () {
+
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
+
+            //2.初始化Button的点击事件
+            var oButtonInit = new ButtonInit();
+            oButtonInit.Init();
+
+        });
+
+        var TableInit = function () {
+            var oTableInit = new Object();
+            function isLockedFormatter(value) {
+                if (value) {
+                    return "<span class='label label-danger'>" + value + "</span>";
+                }
+                else {
+                    return "<span class='label label-success'>" + value + "</span>";
+                }
+            };
+            //初始化Table
+            oTableInit.Init = function () {
+                $($tableID).bootstrapTable({
+                    url: $queryUrl, //请求后台的URL（*）
+                    method: 'post',  //请求方式（*）
+                    toolbar: $toolbar, //工具按钮用哪个容器
+                    striped: true,  //是否显示行间隔色
+                    cache: false,  //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: false,  //是否显示分页（*）
+                    sortable: false,  //是否启用排序
+                    sortOrder: "asc",  //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    responseHandler: function (res) { return res.Data; },
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 10,  //初始化加载第一页，默认第一页
+                    pageSize: 10,  //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    strictSearch: true,
+                    showColumns: true,  //是否显示所有的列
+                    showRefresh: true,  //是否显示刷新按钮
+                    minimumCountColumns: 2, //最少允许的列数
+                    clickToSelect: true, //是否启用点击选中行
+                    height: 400,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "ID",  //每一行的唯一标识，一般为主键列
+                    showToggle: true,  //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,  //是否显示详细视图
+                    detailView: false,  //是否显示父子表
+                    columns: [{
+                        checkbox: true
+                    },
+                     {
+                         title: '应用ID',
+                         field: 'ClientID'
+                     }, {
+                         title: '用户ID',
+                         field: 'UserID'
+                     }, {
+                         title: '用户名称',
+                         field: 'UserName'
+                     },
+                    {
+                        title: '秘钥类型',
+                        field: 'TokenType'
+                    }, {
+                        title: '秘钥',
+                        field: 'Token'
+                    }, {
+                        title: '申请权限',
+                        field: 'RoleScope'
+                    }, {
+                        title: '生成时间(Utc)',
+                        field: 'IssuedUtc'
+                    }, {
+                        title: '过期时间(Utc)',
+                        field: 'ExpiresUtc'
+                    }]
+                });
+            };
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    Limit: params.limit, //页面大小
+                    Offset: (params.offset), //页码
+                    Name: $("#txt_search_app").val()
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+
+        var ButtonInit = function () {
+            var oInit = new Object();
+            var isCreate, postdata = {};
+
+            oInit.Init = function () {
+
+                //删除数据click事件注册
+                $($btnDelete).click(function () {
+                    var arrselections = $($tableID).bootstrapTable('getSelections');
+                    if (arrselections.length <= 0) {
+                        Ewin.warning('请选择有效数据');
+                        return;
+                    }
+                    Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
+                        if (!e) {
+                            return;
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: $deleteUrl,
+                            data: { tokens: $.Enumerable.From(arrselections).Select('$.Token').ToArray() },
+                            success: function (data, status) {
+                                if (status == "success") {
+                                    Ewin.alertResponseData(data, '删除成功');
+                                    $($tableID).bootstrapTable('refresh');
+                                }
+                            },
+                            dataType: "json",
+                            error: function () {
+                                Ewin.error('Error');
+                            },
+                            complete: function () {
+
+                            }
+
+                        });
+                    });
+                });
+
+                //条件查询click事件注册
+                $($btnQuery).click(function () {
+                    $($tableID).bootstrapTable('refresh');
+                });
+
+            };
+            return oInit;
+        };
+
+    </script>
+}
+

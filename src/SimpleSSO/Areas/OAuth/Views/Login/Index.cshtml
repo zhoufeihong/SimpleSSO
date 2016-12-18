@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 22px;
+    }
+</style>
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#"><b>SimpleSSO</b></a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">用户登录</p>
+        @Html.ValidationSummary()
+        @using (Html.BeginForm("Index", "Login", new { Query = Request.Url.Query }, FormMethod.Post))
+        {
+        <div class="form-group has-feedback">
+            <input id="user_name" type="text" class="form-control" name="Name" placeholder="用户名">
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password" class="form-control" name="Password" placeholder="密码">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            @Html.DropDownList("ddl_Role", new List<SelectListItem> {
+                new SelectListItem { Text="user",Value="user" }}
+                 , new { style = "",@class= "js-states form-control" })
+
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="checkbox icheck">
+                    <label>
+                        @Html.CheckBox("isRemenber", true) 记住我
+                    </label>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+            </div>
+            <!-- /.col -->
+        </div>
+        }
+    </div>
+    <!-- /.login-box-body -->
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            $("#ddl_Role").select2({
+                ajax: {
+                    url: function (params) {
+                        var likeUser = params.term || '';
+                        return "@Url.Action("UserRoles")" + "?userName=" + $("#user_name").val() + "&likeUser=" + likeUser;
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data, params) {
+                        return {
+                            results: data.Data
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "ShowUser";
+}
+<div>
+    <button id="get_data" type="button" class="btn btn-default">Try Get Data</button>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#get_data").click(function () {
+                var hashDiv = getHashStringArgs();
+                var token = hashDiv["access_token"];
+                var tokenType = hashDiv["token_type"];
+                if (token) {
+                    var url = "@ViewBag.ServerTicketMessageUrl";
+                    var settings = {
+                        type: "GET",
+                        url: url,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("Authorization", tokenType + " " + token);
+                        },
+                        success: function (data, textStatus) {
+                            alert(JSON.stringify(data));
+                        }
+                    };
+                    $.ajax(settings);
+                }
+            });
+        });
+        function getHashStringArgs() {
+            var hashStrings = (window.location.hash.length > 0 ? window.location.hash.substring(1) : ""),
+           hashArgs = {},
+           items = hashStrings.length > 0 ? hashStrings.split("&") : [],
+           item = null,
+           name = null,
+           value = null,
+           i = 0,
+           len = items.length;
+            for (i = 0; i < len; i++) {
+                item = items[i].split("=");
+                name = decodeURIComponent(item[0]);
+                value = decodeURIComponent(item[1]);
+                if (name.length > 0) {
+                    hashArgs[name] = value;
+                }
+            }
+            return hashArgs;
+        }
+    </script>
+}

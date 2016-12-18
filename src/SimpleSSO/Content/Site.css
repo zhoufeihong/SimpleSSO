@@ -1,0 +1,27 @@
+﻿.login-panel {
+    margin-top: 25%;
+}
+
+.content {
+     min-height: 250px; 
+     padding: 0px; 
+     margin-right: auto; 
+     margin-left: auto; 
+     padding-left: 0px; 
+     padding-right: 2px; 
+     height:100%;
+}
+
+iframe {
+    border: 1px solid;
+}
+
+.content-header {
+    padding: 5px;
+}
+
+.content-header > .breadcrumb {
+        float: left;
+        position:static;
+        padding:3px 5px;
+    }

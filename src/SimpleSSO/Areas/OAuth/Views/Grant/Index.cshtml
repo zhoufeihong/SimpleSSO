@@ -1,0 +1,70 @@
+﻿@model SimpleSSO.DTO.System.AppDTO
+@{
+    ViewBag.Title = "SimpleSSO 授权";
+}
+<style>
+    body {
+        background-color: #fff;
+    }
+
+    .box-header.with-border {
+        background-color: #51b7ec;
+    }
+
+    .box.box-primary {
+        border-top: 5px solid #51b7ec;
+    }
+
+    div > .pull-right {
+        font-size: 14px;
+        color: #fff;
+    }
+</style>
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            <img class="profile-user-img img-responsive img-circle" src="~/Content/image/FreeBird.jpg" alt="User profile picture">
+        </h3>
+        <div class="pull-right">
+            SimpleSSO授权登录
+        </div>
+    </div>
+    <div class="box-body">
+        <div style="margin:0% auto;width:370px">
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img class="profile-user-img img-responsive img-circle" src="../..@Model.IconUrl" alt="User profile picture">
+
+                    <h3 class="profile-username text-center">@Model.Name</h3>
+
+                    <p class="text-muted text-center">一个友好的网站</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            @if (ViewBag.Scope == "user_all")
+                            {
+                                <b style="color:red">&nbsp用户全部信息获取</b>
+                                <span class="pull-right" style="color:red">√&nbsp&nbsp&nbsp</span>
+                            }
+                            else
+                            {
+                                <b>&nbsp用户基础信息获取</b>
+                                <span class="pull-right">√&nbsp&nbsp&nbsp</span>
+                            }
+                         
+                        </li>
+                        <li class="list-group-item">
+                            <b>&nbsp用户隐私查看</b> <span class="pull-right" style="color:red">X&nbsp&nbsp&nbsp</span>
+                        </li>
+                        <li class="list-group-item">
+                            <b>&nbsp Scope</b> <span class="pull-right">@ViewBag.Scope</span>
+                        </li>
+                    </ul>
+
+                    <a href="@ViewBag.AccessUrl" class="btn btn-primary btn-block"><b>授权进入</b></a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>

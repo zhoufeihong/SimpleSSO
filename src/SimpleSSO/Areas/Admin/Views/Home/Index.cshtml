@@ -1,0 +1,139 @@
+﻿@model SimpleSSO.DTO.System.UserDTO
+@{
+    ViewBag.Title = "Admin";
+}
+<div>
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>鸿</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Simple</b>SSO</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/image/FreeBird.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@Model.Name</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/image/FreeBird.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                        @Model.RealName
+                                        <small></small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="~/OAuth/Login/Logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="header">System</li>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                <span>系统管理</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="~/Admin/User/index"><i class="glyphicon glyphicon-user"></i> 用户管理</a></li>
+                                <li><a href="~/Admin/App/index"><i class="glyphicon glyphicon-th-list"></i> 应用管理</a></li>
+                                <li><a href="~/Admin/Role/Index"><i class="glyphicon glyphicon-plus"></i> 角色管理</a></li>
+                                <li><a href="~/Admin/Ticket/Index"><i class="glyphicon glyphicon-plus"></i> 秘钥管理</a></li>
+                            </ul>
+                        </li>
+                    }
+                    <li class="treeview active">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-home"></i>
+                            <span>SimpleSSO应用</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="active"><a href="~/Admin/App/List"><i class="glyphicon glyphicon-th-large"></i>应用ShowCase</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <ol id="breadcrumb-map" class="breadcrumb">
+                    <li><i class="glyphicon glyphicon-file"></i> 首页</li>
+                    <li></li>
+                </ol>
+            </section>
+            <div class="content">
+                <iframe scrolling="auto" style="height:100%;width:100%"></iframe>
+            </div>
+        </div>
+        @section scripts{
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    toastr.options.positionClass = 'toast-center-center';
+                    $(document).on('click', '.treeview-menu li a', function (e) {
+                        var href = $(this).attr('href');
+                        if (href === '#' || /^http.*/.test(href)) {
+                            return;
+                        }
+                        e.preventDefault();
+                        $('.treeview-menu li').removeClass('active');
+                        $(this).parent().addClass('active');
+                        var pageName = $(this).parent().text();
+                        var modelName = $(this).parent().parent().prev(" a").find(' span').text();
+                        $("#breadcrumb-map li").each(
+                            function (i, n) {
+                                if (i == 0) {
+                                    $(n).html('<i class="fa fa-dashboard"></i>' + modelName + '</li>');
+                                    return true;
+                                }
+                                $(n).text(pageName);
+                            });
+                        location.hash = href;
+                        $('iframe').attr('src', href);
+                    });
+                    var href = location.hash.substring(1) || '../Admin/App/List';
+                    $('iframe').attr('src', href);
+                    $('iframe').height($(window).height() - 85);
+                });
+            </script>
+        }
+    </div>
+</div>

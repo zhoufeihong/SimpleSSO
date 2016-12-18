@@ -1,0 +1,25 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@using FreeBird.Infrastructure.Exceptions;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>错误</title>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+</head>
+<body>
+    @if (Model.Exception is BusinessException)
+    {
+        <h4>@Model.Exception.Message</h4>
+    }
+    else if (Model.Exception is AuthorizationException)
+    {
+        <h4>权限不足.</h4>
+    }
+    else
+    {
+        <h4>系统响应错误.</h4>
+    }
+</body>
+</html>

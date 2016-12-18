@@ -1,0 +1,36 @@
+﻿Enable-Migrations -EnableAutomaticMigrations
+Enable-Migrations -Force
+Add-Migration InitialCreate
+Update-Database -Verbose
+
+>  get-help                  获取帮助的命令(例：get-help Enable-Migrations –detailed)  
+           –detailed                 详细用法  
+        >  Enable-Migrations         启用迁移  
+           -Force                    强制覆盖  
+           -ProjectName              目标项目(迁移类所在的项目)  
+           -StartUpProjectName       启动项目(包含数据库连接字符串配置文件所在的项目)  
+           -ContextTypeName          需要迁移的数据库(类)  
+           -ConnectionStringName     指定使用配置文件中连接字符串的名称  
+           -ConnectionString         指定使用的连接字符串  
+           -ConnectionProviderName   指定连接字符串的provider名称  
+           -MigrationsDirectory      指定迁移文件的目录（多个数据库，独立自动迁移用）  
+        >  Add-Migration             为挂起的Model变化添加迁移脚本  
+           -Force  
+           -ProjectName  
+           -StartUpProjectName  
+           -ConfigurationTypeName    指定使用的迁移配置  
+           -IgnoreChanges            忽略检测到挂起的model改变，为已有的数据库启用迁移创建一个初始的，空的迁移。  
+           -ConnectionStringName    
+           -ConnectionString        
+           -ConnectionProviderName   
+        >  Update-Database           将挂起的迁移更新到数据库  
+           -Force  
+           -ProjectName  
+           -StartProjectName  
+           -ConfigurationTypeName  
+           -ConnectionStringName   
+           -ConnectionString   
+           -ConnectionProviderName   
+           -SourceMigration          只有-Script打开时才有效。指定迁移的名称用作更新的起点。忽略则使用最后一次应用的迁移。  
+           -TargetMigration          指定将数据库更新到哪个迁移的名称。  
+           -Script                   生成SQL脚本  

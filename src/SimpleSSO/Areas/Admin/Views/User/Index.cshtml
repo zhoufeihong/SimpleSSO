@@ -1,0 +1,439 @@
+﻿
+@{
+    ViewBag.Title = "User";
+}
+<div style="width:100%;height:100%">
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="control-label col-sm-1" for="txt_search_userName">用户名</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txt_search_userName">
+                        </div>
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            </button>
+            <button id="btn_edit" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+            </button>
+            <button id="btn_delete" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+            </button>
+        </div>
+        <table id="tb_users" style="height:15%"></table>
+    </div>
+</div>
+<form id="edit-form" class="form-inline">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width:65%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="txt_userID">用户ID</label>
+                        <input type="text" name="UserID" class="form-control has-feedback" id="txt_userID" placeholder="自动生成" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_userName">用户名</label>
+                        <input type="text" name="UserName" class="form-control" id="txt_userName" placeholder="用户名">
+                    </div>
+                    <div class="form-group show">
+                        <label for="slt_userRoles">角色</label>
+                        <select id="slt_userRoles" class="select2 form-control" style="width:60%"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_password">  密码</label>
+                        <input type="password" name="Password" class="form-control" id="txt_password" placeholder="密码">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_realName">真实姓名</label>
+                        <input type="text" name="RealName" class="form-control" id="txt_realName" placeholder="真实姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_mobile"> 手机</label>
+                        <input type="text" name="Mobile" class="form-control" id="txt_mobile" placeholder="手机">
+                    </div>
+                    <div class="form-group">
+                        <label for="txt_email">  邮箱</label>
+                        <input type="text" name="Email" class="form-control" id="txt_email" placeholder="邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label>  锁定</label>
+                        <div class="checkbox">
+                            <label>
+                                <input id="ckb_isEnlocked" type="checkbox">
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                    <button type="submit" id="btn_submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .form-group {
+        padding: 3px;
+    }
+
+        .form-group > label {
+            width: 85px;
+            text-align: right;
+        }
+
+        .form-group > input {
+            padding-right: 42.5px;
+        }
+
+    .panel {
+        margin-bottom: 5px;
+    }
+
+    .panel-body {
+        padding: 5px;
+    }
+</style>
+@section scripts
+{
+    <script type="text/javascript">
+        var $btnAdd = "#btn_add",
+            $btnEdit = "#btn_edit",
+            $btnDelete = "#btn_delete",
+            $btnQuery = "#btn_query",
+            $modalLabel = "#myModalLabel",
+            $modal = "#myModal",
+            $formID = "#edit-form",
+            $tableID = "#tb_users",
+            $queryUrl = "/User/Query",
+            $createUrl = "/User/Create",
+            $editUrl = "/User/Edit",
+            $deleteUrl = "/User/Delete",
+            $roleQueryUrl = "../Role/Query";
+        $toolbar = "#toolbar";
+
+        function initEditForm(data) {
+            $("#slt_userRoles").val(data.RoleIDs).trigger("change");
+            $("#txt_userID").val(data.UserID);
+            $("#txt_userName").val(data.Name);
+            $("#txt_realName").val(data.RealName);
+            $("#txt_mobile").val(data.Mobile);
+            $("#txt_email").val(data.Email);
+            $("#ckb_isEnlocked").prop("checked", data.IsLocked);
+        }
+
+        function getFormData() {
+            var data = {};
+            data.Name = $("#txt_userName").val();
+            data.RealName = $("#txt_realName").val();
+            data.Mobile = $("#txt_mobile").val();
+            data.Email = $("#txt_email").val();
+            data.Password = $("#txt_password").val();
+            data.IsLocked = $("#ckb_isEnlocked").prop("checked");
+            data.RoleIDs = $("#slt_userRoles").val();
+            return data;
+        }
+
+        function $Post(url, func)
+        {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: null,
+                success:func
+            });
+        }
+
+        $(function () {
+
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
+
+            //2.初始化Button的点击事件
+            var oButtonInit = new ButtonInit();
+            oButtonInit.Init();
+
+        });
+
+        var TableInit = function () {
+            var oTableInit = new Object();
+            function isLockedFormatter(value) {
+                if (value) {
+                    return "<span class='label label-danger'>" + value + "</span>";
+                }
+                else {
+                    return "<span class='label label-success'>" + value + "</span>";
+                }
+            };
+            //初始化Table
+            oTableInit.Init = function () {
+                $($tableID).bootstrapTable({
+                    url: $queryUrl, //请求后台的URL（*）
+                    method: 'post',  //请求方式（*）
+                    toolbar: $toolbar, //工具按钮用哪个容器
+                    striped: true,  //是否显示行间隔色
+                    cache: false,  //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,  //是否显示分页（*）
+                    sortable: false,  //是否启用排序
+                    sortOrder: "asc",  //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    responseHandler: function (res) { return res.Data; },
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,  //初始化加载第一页，默认第一页
+                    pageSize: 10,  //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    strictSearch: true,
+                    showColumns: true,  //是否显示所有的列
+                    showRefresh: true,  //是否显示刷新按钮
+                    minimumCountColumns: 2, //最少允许的列数
+                    clickToSelect: true, //是否启用点击选中行
+                    height: 400,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "ID",  //每一行的唯一标识，一般为主键列
+                    showToggle: true,  //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,  //是否显示详细视图
+                    detailView: false,  //是否显示父子表
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        field: 'Name',
+                        title: '名称'
+                    }, {
+                        field: 'RealName',
+                        title: '真实姓名'
+                    }, {
+                        formatter: isLockedFormatter,
+                        field: 'IsLocked',
+                        title: '锁定'
+                    }
+                    , {
+                        field: 'Mobile',
+                        title: '手机'
+                    }
+                    , {
+                        field: 'Email',
+                        title: '邮箱'
+                    }, {
+                        field: 'CreatedOn',
+                        title: '创建时间'
+                    }, {
+                        field: 'CreatedBy',
+                        title: '创建人'
+                    }, {
+                        field: 'LastUpdatedOn',
+                        title: '最后更新时间'
+                    }, {
+                        field: 'LastUpdatedBy',
+                        title: '最后更新人'
+                    }]
+                });
+            };
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    Limit: params.limit, //页面大小
+                    Offset: (params.offset), //页码
+                    Name: $("#txt_search_userName").val()
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+
+        var ButtonInit = function () {
+            var oInit = new Object();
+            var isCreate, postdata = {};
+
+            var InitForm = function (args) {
+                var editForm = $($formID).data('bootstrapValidator');
+                if (editForm) {
+                    isCreate = args.isCreate;
+                    postdata.ID = args.ID;
+                    editForm.resetForm();
+                    if (isCreate) {
+                        editForm.enableFieldValidators('Password', true);
+                    }
+                    else {
+                        editForm.enableFieldValidators('Password', false);
+                    }
+                    return;
+                }
+                $Post($roleQueryUrl,function (data, textStatus, jqXHR)
+                {
+                    $("#slt_userRoles").select2({
+                        multiple: true,
+                        data: $.Enumerable.From(data.Data.rows).Select(function (r, i)
+                        {
+                            return {
+                                id: r.ID,
+                                text: r.Name
+                            };
+                        }).ToArray()
+                    })
+                });
+               
+                $($formID).bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    submitHandler: function (validator, form, submitButton) {
+                        $.extend(postdata, getFormData());
+                        $.ajax({
+                            type: "post",
+                            url: isCreate ? $createUrl : $editUrl,
+                            data: postdata,
+                            success: function (data, status) {
+                                Ewin.alertResponseData(data, '提交数据成功');
+                                $($modal).modal('hide');
+                                $($tableID).bootstrapTable('refresh');
+                            },
+                            error: function () {
+                                Ewin.error('Error');
+                            },
+                            complete: function () {
+                            }
+                        });
+                    },
+                    fields: {
+                        UserName: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The user name is required'
+                                }
+                            }
+                        },
+                        RealName: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The real name is required'
+                                }
+                            }
+                        },
+                        //Mobile: {
+                        //    validators: {
+                        //        phone: {
+                        //            message: 'The mobile erro',
+                        //            country: 'CN'
+                        //        }
+                        //    }
+                        //},
+                        Email: {
+                            validators: {
+                                emailAddress: {
+                                    message: 'The email erro'
+                                }
+                            }
+                        },
+                        Password: {
+                            validators: {
+                                stringLength: {
+                                    min: 3,
+                                    message: 'The password must greater than 3 length'
+                                },
+                                notEmpty: {
+                                    message: 'The password is required'
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            oInit.Init = function () {
+
+                InitForm();
+                //新增数据click事件注册
+                $($btnAdd).click(function () {
+                    $($modalLabel).text("新增");
+                    $($modal).find(".form-control").val("");
+                    $("#ckb_isEnlocked").prop("checked", true);
+                    $("#slt_userRoles").val(null).trigger("change");
+                    InitForm({ isCreate: true, ID: '' });
+                    $($modal).modal();
+                });
+
+                //编辑数据click事件注册
+                $($btnEdit).click(function () {
+                    var arrselections = $($tableID).bootstrapTable('getSelections');
+                    if (arrselections.length > 1) {
+                        Ewin.warning('只能选择一行进行编辑');
+                        return;
+                    }
+                    if (arrselections.length <= 0) {
+                        Ewin.warning('请选择有效数据');
+                        return;
+                    }
+                    $($modalLabel).text("编辑");
+                    $($modal).find(".form-control").val("");
+                    initEditForm(arrselections[0]);
+                    InitForm({ isCreate: false, ID: arrselections[0].ID });
+                    $($modal).modal();
+
+                });
+
+                //删除数据click事件注册
+                $($btnDelete).click(function () {
+                    var arrselections = $($tableID).bootstrapTable('getSelections');
+                    if (arrselections.length <= 0) {
+                        Ewin.warning('请选择有效数据');
+                        return;
+                    }
+                    Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
+                        if (!e) {
+                            return;
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: $deleteUrl,
+                            data: { ids: $.Enumerable.From(arrselections).Select('$.ID').ToArray() },
+                            success: function (data, status) {
+                                if (status == "success") {
+                                    Ewin.alertResponseData(data, '删除成功');
+                                    $($tableID).bootstrapTable('refresh');
+                                }
+                            },
+                            dataType: "json",
+                            error: function () {
+                                Ewin.error('Error');
+                            },
+                            complete: function () {
+
+                            }
+
+                        });
+                    });
+                });
+
+                //条件查询click事件注册
+                $($btnQuery).click(function () {
+                    $($tableID).bootstrapTable('refresh');
+                });
+
+            };
+            return oInit;
+        };
+
+    </script>
+}
+

@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 登录</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/admin-lte/css")
+    @Styles.Render("~/bootstrap-table/css")
+    @Styles.Render("~/bootstrapValidator/css")
+    @Styles.Render("~/fileinput/css")
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/select2/css")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/jquery-ui/css")
+    <style>
+        body {
+            font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery/plugins")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/admin-lte")
+    @Scripts.Render("~/bundles/bootstrap-table")
+    @Scripts.Render("~/bundles/bootstrapValidator")
+    @Scripts.Render("~/bundles/fileinput")
+    @Scripts.Render("~/bundles/jquery-linq")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/select2")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/SimpleSSO")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
