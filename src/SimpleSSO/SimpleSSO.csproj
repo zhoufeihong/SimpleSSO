@@ -267,6 +267,9 @@
     <Compile Include="Code\OAuth\BSimpleSSOOAuthProvider.cs" />
     <Compile Include="Code\OAuth\SimpleAuthenticationTokenProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="SignalRHubs\AdminMessageHub.cs" />
+    <Compile Include="SignalRHubs\SendMessageService.cs" />
+    <Compile Include="SignalRHubs\SendToUsersHub.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -479,6 +482,8 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Upload\AppIcon\7174e6d6-3758-4bf7-9824-a03e32719412.png" />
+    <Content Include="Upload\AppIcon\bf2deed1-142f-4421-8975-d8b965591682.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -498,7 +503,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\OAuth\Models\" />
-    <Folder Include="Upload\AppIcon\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -12,12 +12,19 @@ using FreeBird.Infrastructure.OAuth;
 using FreeBird.Infrastructure.Exceptions;
 using SimpleSSO.Domain.System;
 using static SimpleSSO.Setting;
+using SimpleSSO.SignalRHubs.Admin;
+using Microsoft.AspNet.SignalR;
+using SimpleSSO.SignalRHubs;
 
 namespace SimpleSSO.Code.OAuth
 {
     public class SimpleSSOOAuthProvider : OAuthAuthorizationServerProvider
     {
         private AppService _appService => EngineContext.Current.Resolve<AppService>();
+
+        private IHubContext _adminMessageHub = GlobalHost.ConnectionManager.GetHubContext<AdminMessageHub>();
+
+        private SendMessageService _sendMessageService = new SendMessageService();
 
         protected ITicketStore TicketStore => EngineContext.Current.Resolve<ITicketStore>();
 
@@ -58,6 +65,7 @@ namespace SimpleSSO.Code.OAuth
             {
                 var user = result.Data;
                 ClaimsIdentity oAuthIdentity = ClaimsIdentityCreate.GenerateUserIdentity(user, OAuthDefaults.AuthenticationType);
+                _sendMessageService.SendToAdmin(_adminMessageHub, $"AppID为{context.ClientId}客户端，给用户{context.UserName}申请Password授权成功.");
                 //设置角色
                 oAuthIdentity.AddRole(RoleConfig.AppUserAllRole);
                 AuthenticationProperties properties = CreateProperties(user.Name);

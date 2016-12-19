@@ -1,7 +1,16 @@
 ﻿@model SimpleSSO.DTO.System.UserDTO
+@using SimpleSSO;
 @{
     ViewBag.Title = "Admin";
 }
+@{
+    var isAdmin = User.IsInRole(Setting.RoleConfig.AdminRole);
+}
+<style>
+    #msg-menu {
+    font-size:12px;
+    }
+</style>
 <div>
     <div class="wrapper">
         <header class="main-header">
@@ -23,6 +32,21 @@
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning msg-count">0</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">You have <span class="msg-count">0</span> notifications</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul id="msg-menu" class="menu"></ul>
+                                </li>
+                                <li class="footer"><a href="#">@Model.Name</a></li>
+                            </ul>
+                        </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -57,7 +81,7 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="header">System</li>
-                    @if (User.IsInRole("admin"))
+                    @if (isAdmin)
                     {
                         <li class="treeview">
                             <a href="#">
@@ -106,6 +130,21 @@
         </div>
         @section scripts{
             <script type="text/javascript">
+
+                function CloseMessage(li) {
+                    $(li).remove();
+                    $(".navbar-custom-menu .msg-count").html($("#msg-menu li").length);
+                }
+
+                function AddMessage(msg) {
+                    $("#msg-menu").append("<li onclick=CloseMessage(this) >"
+                        + "<a href='#'>"
+                        + "<i class='fa fa-warning text-yellow'></i> "
+                        + msg
+                        + "</a> </li>");
+                    $(".navbar-custom-menu .msg-count").html($("#msg-menu li").length);
+                }
+
                 $(document).ready(function () {
                     toastr.options.positionClass = 'toast-center-center';
                     $(document).on('click', '.treeview-menu li a', function (e) {
@@ -133,7 +172,39 @@
                     $('iframe').attr('src', href);
                     $('iframe').height($(window).height() - 85);
                 });
+
+                $(function () {
+                    var connection = $.connection.hub,
+                        userHub = $.connection.sendToUsersHub;
+                    connection.logging = true;
+                    userHub.client.hubMessage = function (value) {
+                        AddMessage(value);
+                    }
+                    window.Hub = {
+                        sendToUsers: function (userIds, message) {
+                            var listUsers = userIds.split(";");
+                            userHub.server.sendToUsers(listUsers, message);
+                        },
+                        sendToUser: function (userId, message) {
+                            userHub.server.sendToUsers(userId, message);
+                        }
+                    };
+                    @if (isAdmin)
+                    {
+                    <text>
+                    var adminHub = $.connection.adminMessageHub;
+                    adminHub.client.hubMessage = function (value) {
+                        AddMessage(value);
+                    }
+                    window.Hub.sendToAdmin = function (message) {
+                        adminHub.server.sendToAdmin(message);
+                    };
+                    </text>
+                    }
+                    connection.start().done(function () { }).fail(function (error) { });
+                });
             </script>
+            @Scripts.Render("~/signalr/js")
         }
     </div>
 </div>
