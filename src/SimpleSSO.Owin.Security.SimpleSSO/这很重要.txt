@@ -1,0 +1,2 @@
+为节省时间，直接拷贝修改自微软Katana项目
+Microsoft.Owin.Security.MicrosoftAccount

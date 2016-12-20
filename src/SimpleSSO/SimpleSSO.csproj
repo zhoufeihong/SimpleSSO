@@ -273,6 +273,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Install\create_init_data2016-12-20.sql" />
     <Content Include="App_Data\Install\create_init_data.sql" />
     <Content Include="Plugins\admin-lte\css\AdminLTE.css" />
     <Content Include="Plugins\admin-lte\css\AdminLTE.min.css" />
@@ -484,6 +485,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Upload\AppIcon\7174e6d6-3758-4bf7-9824-a03e32719412.png" />
     <Content Include="Upload\AppIcon\bf2deed1-142f-4421-8975-d8b965591682.png" />
+    <Content Include="Upload\AppIcon\c31e9a9f-3651-4a9a-8ddf-f2cd80704efd.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

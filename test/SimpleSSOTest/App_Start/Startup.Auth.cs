@@ -8,6 +8,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
+using Microsoft.Owin.Security.SimpleSSO;
+
 namespace SimpleSSOTest
 {
     public partial class Startup
@@ -26,6 +28,18 @@ namespace SimpleSSOTest
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
+            var simpleSSOOption = new SimpleSSOAccountAuthenticationOptions
+            {
+                ClientId = "3",
+                ClientSecret = "123",
+                CallbackPath = new PathString("/login/signin-simplesso"),
+                TokenEndpoint = "http://localhost:8550/token",
+                AuthorizationEndpoint = "http://localhost:8550/GrantCode/Authorize",
+                UserInformationEndpoint = "http://localhost:8550/TicketUser/TicketMessage"
+            };
+
+            simpleSSOOption.Scope.Add("user-base");
+            app.UseSimpleSSOAccountAuthentication(simpleSSOOption);
 
 
             // 取消注释以下行可允许使用第三方登录提供程序登录

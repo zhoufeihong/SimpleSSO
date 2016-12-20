@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SimpleSSOTest.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,7 @@ namespace SimpleSSOTest.Controllers
             return $"<font color='black'><b>应用App1获取到</b></font></br>refresh_token:{refreshToken}</br>access_token:{accessToken}";
         }
 
+  
         #region
 
         private async Task<string> AppData(string code,
@@ -101,6 +103,14 @@ namespace SimpleSSOTest.Controllers
             return await Task.FromResult(strMessage.ToString());
         }
 
+        /// <summary>
+        /// authorization_code示例
+        /// </summary>
+        /// <param name="appName"></param>
+        /// <param name="clientID"></param>
+        /// <param name="clientSecret"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         private async Task<string> AuthorizationCode(string appName, string clientID, string clientSecret, string code)
         {
             var parameters = new Dictionary<string, string>();
@@ -114,12 +124,24 @@ namespace SimpleSSOTest.Controllers
             return await response.Content.ReadAsStringAsync();
         }
 
+        /// <summary>
+        /// 通过秘钥获取用户信息示例
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         private async Task<string> GetTicketMessageData(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return await _httpClient.GetAsync(_serverTicketMessageUrl).Result.Content.ReadAsStringAsync();
         }
 
+        /// <summary>
+        /// 刷新秘钥示例
+        /// </summary>
+        /// <param name="clientID"></param>
+        /// <param name="clientSecret"></param>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
         private async Task<string> RefreshToken(string clientID, string clientSecret, string refreshToken)
         {
             var parameters = new Dictionary<string, string>();

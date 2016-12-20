@@ -12,6 +12,7 @@ namespace SimpleSSOTest.Controllers
 
         private const string _serverTicketMessageUrl = _serverUrl + "/TicketUser/TicketMessage";
         // GET: TokenClient/ShowUser
+        [ValidateInput(false)]
         public ActionResult ShowUser()
         {
             ViewBag.ServerTicketMessageUrl = _serverTicketMessageUrl;
