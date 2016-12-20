@@ -10,7 +10,7 @@
 </style>
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-tag"></i>开发平台模式信息获取 </h3>
+        <h3 class="box-title"><i class="fa fa-tag"></i>使用Microsoft.Owin.Security.SimpleSSO模拟OpenID认证 </h3>
     </div>
     <div class="box-body">
         @foreach (var app in Model.Where(w => w.ClientID == 3))
@@ -37,7 +37,7 @@
 </div>
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-tag"></i>使用Code应用列表 </h3>
+        <h3 class="box-title"><i class="fa fa-tag"></i>通过authorization code授权模式申请令牌 </h3>
     </div>
     <div class="box-body">
         @foreach (var app in Model.Where(w => w.ClientID == 1))
@@ -68,7 +68,7 @@
 </div>
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-tag"></i>使用Token应用列表 </h3>
+        <h3 class="box-title"><i class="fa fa-tag"></i>通过implicit授权模式申请令牌 </h3>
     </div>
     <div class="box-body">
         @foreach (var app in Model.Where(w => w.ClientID == 2))
@@ -100,7 +100,7 @@
 
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-tag"></i>使用用户密码应用列表 </h3>
+        <h3 class="box-title"><i class="fa fa-tag"></i>通过password模式申请令牌 </h3>
     </div>
     <div class="box-body">
         @foreach (var app in Model.Where(w => w.ClientID == 1))
@@ -128,7 +128,7 @@
 
 <div class="box box-default color-palette-box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-tag"></i>获取自己秘钥应用列表 </h3>
+        <h3 class="box-title"><i class="fa fa-tag"></i>通过client credentials模式申请令牌 </h3>
     </div>
     <div class="box-body">
         @foreach (var app in Model.Where(w => w.ClientID == 1))
