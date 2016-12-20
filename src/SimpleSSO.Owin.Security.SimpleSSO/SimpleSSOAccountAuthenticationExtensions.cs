@@ -39,7 +39,7 @@ namespace Owin
         /// <param name="clientId">The application client ID assigned by the Microsoft authentication service</param>
         /// <param name="clientSecret">The application client secret assigned by the Microsoft authentication service</param>
         /// <returns></returns>
-        public static IAppBuilder UseMicrosoftAccountAuthentication(
+        public static IAppBuilder UseSimpleSSOAccountAuthentication(
             this IAppBuilder app,
             string clientId,
             string clientSecret)
