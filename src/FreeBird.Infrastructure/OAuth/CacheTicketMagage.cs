@@ -67,7 +67,7 @@ namespace FreeBird.Infrastructure.OAuth
 
         public bool SetTicketValue(GrantData tokenValue)
         {
-            TicketStore.Set(tokenValue.Token, tokenValue, (tokenValue.ExpiresUtc - tokenValue.IssuedUtc).Minutes);
+            TicketStore.Set(tokenValue.Token, tokenValue, (int)(tokenValue.ExpiresUtc - tokenValue.IssuedUtc).TotalMinutes);
             return true;
         }
 
